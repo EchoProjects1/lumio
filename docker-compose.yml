@@ -53,10 +53,6 @@ services:
       # steht. Aktivieren in .env mit LUMIO_CUSTOM_DOMAIN_TLS_HOST=https://
       # Default tot (127.0.0.8:9) = kein Cert-Versuch, Verhalten wie bisher.
       - LUMIO_CUSTOM_DOMAIN_TLS_HOST=${LUMIO_CUSTOM_DOMAIN_TLS_HOST:-127.0.0.8:9}
-    ports:
-      - "${CADDY_HTTP_PORT:-80}:80"
-      - "${CADDY_HTTPS_PORT:-443}:443"
-      - "${CADDY_HTTPS_PORT:-443}:443/udp"
     volumes:
       - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./infra/caddy/secrets:/etc/caddy/secrets:ro
@@ -107,8 +103,6 @@ services:
     # versehentlich ohne Caddy aus dem Internet erreichbar ist. Für direkte
     # Erreichbarkeit FRONTEND_PORT in der .env setzen und (optional) das
     # Binding auf 0.0.0.0 ändern.
-    ports:
-      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
     depends_on:
       - api
     networks:
@@ -194,8 +188,6 @@ services:
       - DISABLE_UPDATE_CHECK=${DISABLE_UPDATE_CHECK:-}
     # Auch hier: direkter Port ist Debug-Hilfe, regulärer Zugriff geht durch
     # Caddy → /api/*.
-    ports:
-      - "127.0.0.1:${API_PORT:-3001}:3001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -273,8 +265,6 @@ services:
     # setzen (z.B. 10.0.0.2), damit Worker-Nodes drankommen. NIE auf
     # 0.0.0.0 — das wäre öffentlich erreichbar. Wenn die Variable leer
     # ist, wird kein Port gemappt.
-    ports:
-      - "${POSTGRES_BIND_IP:-127.0.0.1}:5432:5432"
     networks:
       - lumio_net
 
@@ -298,8 +288,6 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
     # Standard 127.0.0.1 = nur lokal. Multi-Node: REDIS_BIND_IP auf die
     # PRIVATE Netz-IP setzen (z.B. 10.0.0.2). NIE 0.0.0.0.
-    ports:
-      - "${REDIS_BIND_IP:-127.0.0.1}:6379:6379"
     volumes:
       - redis_data:/data
     networks:
