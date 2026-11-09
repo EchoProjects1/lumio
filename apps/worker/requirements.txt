@@ -4,7 +4,7 @@
 
 # Task Queue
 celery[redis]==5.4.0
-redis==5.1.1
+redis>=6.1.0,<7.0.0
 
 # Image processing
 pyvips==2.2.3       # libvips bindings — sehr schnelle Image-Pipeline (auch
