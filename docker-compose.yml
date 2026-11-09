@@ -342,9 +342,6 @@ services:
       - MINIO_API_CORS_ALLOW_ORIGIN=*
     volumes:
       - minio_data:/data
-    ports:
-      - "${MINIO_API_PORT:-9000}:9000"       # S3 API
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"   # Web-Konsole
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:9000/minio/health/live"]
       interval: 10s
